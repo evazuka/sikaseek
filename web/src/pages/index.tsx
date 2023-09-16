@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Head from "next/head";
-import Link from "next/link";
 
 import { ArrowDownIcon, ArrowUpIcon, MoonIcon, Search2Icon, SearchIcon, SunIcon } from '@chakra-ui/icons'
 
@@ -10,10 +9,11 @@ import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPane
 import { useState } from "react";
 import useDebounce from "~/utils/hooks";
 import { Response, SourceNode } from "~/server/api/routers/sikaseek";
+import Link from "next/link";
 
 const demoQuestions1 = [
   'How do I seal my toilet?',
-  'Where to apply for a job at Sika?',
+  'What is Sika\'s sustainability strategy?',
   'What tapes exist for roofing applications?'
 ]
 
@@ -237,6 +237,18 @@ type SourceProps = {
 const SourceInfo = ({ sourceNodes }: SourceProps) => {
   if (sourceNodes === undefined) return null
 
+  const metaSourceNodes = sourceNodes.filter(({ node }) => node.metadata.file_name !== undefined)
+
+  const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+  const regex = new RegExp(expression);
+
+  const webSourceNodes = Array.from(new Set(sourceNodes.map(({ node }) => node.text.match(regex)).filter(x => x !== null).flat().reverse().slice(0, 5)))
+    .filter(x => x?.includes('sika.com'))
+    .filter(x => !x?.endsWith('-'))
+    .map(x => x?.replaceAll('.com/.', '.com'))
+    .filter(x => !x?.endsWith('.'))
+    .map(x => x?.replaceAll('.html)', '.html'))
+
   return <Box>
     <Accordion allowToggle>
       <AccordionItem>
@@ -250,10 +262,11 @@ const SourceInfo = ({ sourceNodes }: SourceProps) => {
         </h2>
         <AccordionPanel pb={4}>
           <Heading size="sm">This information is mentioned in: </Heading>
-          {sourceNodes.map(({ node }) => <Box key={node.id_}>
+          {metaSourceNodes.map(({ node }) => <Box key={node.id_}>
             <Text as='u'>{node.metadata.file_name}</Text>: Page {node.metadata.page_label}
             <Textarea mt={2} mb={4} value={node.text} />
           </Box>)}
+          {webSourceNodes.map((url, i) => <Box key={i}><Text as='u'><Link href={`http://${url!}`} target="_blank">{url}</Link></Text></Box>)}
         </AccordionPanel>
       </AccordionItem>
     </Accordion>
