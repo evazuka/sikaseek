@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from llama_index import VectorStoreIndex, SimpleDirectoryReader, StorageContext, load_index_from_storage
 from llama_index.prompts import PromptTemplate
+from llama_index import VectorStoreIndex, SimpleDirectoryReader, StorageContext, load_index_from_storage
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
@@ -20,8 +20,8 @@ text_qa_template_str = (
     "---------------------\n"
     "{context_str}\n"
     "---------------------\n"
-    "Using context information answer the question: {query_str}\n"
-    "If the context isn't helpful, you can also answer the question using your own knowledge base.\n"
+    "Using context information and your own knowledge base answer the question: {query_str}\n"
+    "Always prefer to answer a question using context.\n"
     "Answer in language in what question was asked.\n"
 )
 text_qa_template = PromptTemplate(text_qa_template_str)
@@ -44,5 +44,4 @@ def read_root():
 
 @app.get("/{query}")
 def read_item(query: str, filter: Union[str, None] = None):
-    return index.as_query_engine(text_qa_template=text_qa_template
-    ).query(query)
+    return index.as_query_engine(text_qa_template=text_qa_template).query(query)

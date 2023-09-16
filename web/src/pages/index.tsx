@@ -2,22 +2,36 @@
 import Head from "next/head";
 import Link from "next/link";
 
-import { MoonIcon, Search2Icon, SearchIcon, SunIcon } from '@chakra-ui/icons'
+import { ArrowDownIcon, ArrowUpIcon, MoonIcon, Search2Icon, SearchIcon, SunIcon } from '@chakra-ui/icons'
 
 import { api } from "~/utils/api";
 import styles from "./index.module.css";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Flex, FormControl, Heading, Input, Skeleton, Stack, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Flex, FormControl, Heading, Input, Skeleton, Stack, Text, Wrap, WrapItem, useColorMode, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import useDebounce from "~/utils/hooks";
 import { Response } from "~/server/api/routers/sikaseek";
 
-const demoQuestions = [
+const demoQuestions1 = [
   'How do I seal my toilet?',
   'I want to apply for a job at Sika',
   'What tapes exist for roofing applications?'
 ]
 
+const demoQuestions2 = [
+  'What kind of mortars does Sika sell?',
+  'What products usually go together with adhesives?',
+  'What types of SikaSeal exist?'
+]
+
+const demoQuestions3 = [
+  'What kind of mortars does Sika sell?',
+  'What products usually go together with adhesives?',
+  'Safety precautions for Davco Super TTB'
+]
+
 export default function Home() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const bg = useColorModeValue('gray.50', 'gray.800')
   const { colorMode, toggleColorMode } = useColorMode()
 
@@ -30,6 +44,7 @@ export default function Home() {
   }
 
   const clickDemo = async (question: string) => {
+    onClose()
     setFilter(question)
     await mutation.mutateAsync({ text: question })
   }
@@ -94,18 +109,47 @@ export default function Home() {
               </FormControl>
               <Button size='lg' rightIcon={<SearchIcon />} onClick={handleSearch} isLoading={mutation.isLoading}>Search</Button>
             </Stack>
-            <Text>...or try this queries:</Text>
+            <Text>...or try this questions:</Text>
             <Stack direction='row'>
-              {demoQuestions.map(q => <Button key={q} size='sm' onClick={() => clickDemo(q)}>
+              {demoQuestions1.map(q => <Button key={q} size='sm' onClick={() => clickDemo(q)}>
                 {q}
               </Button>)}
             </Stack>
+            <Stack direction='row'>
+              <Button size='sm' onClick={onOpen} colorScheme="pink" rightIcon={<ArrowDownIcon />}>
+                Check out more cool examples
+              </Button>
+            </Stack>
+            <Drawer placement='top' onClose={onClose} isOpen={isOpen}>
+              <DrawerOverlay />
+              <DrawerContent>
+                <DrawerHeader borderBottomWidth='1px'>Try out these cool questions</DrawerHeader>
+                <DrawerBody px={8} pb={8}>
+                  <Text my={4}>Questions about products for sales team:</Text>
+                  <Wrap>
+                    {demoQuestions2.map(q => <WrapItem key={q}>
+                      <Button size='sm' onClick={() => clickDemo(q)}>
+                        {q}
+                      </Button>
+                    </WrapItem>)}
+                  </Wrap>
+                  <Text my={4}>Questions about products for customers:</Text>
+                  <Wrap>
+                    {demoQuestions2.map(q => <WrapItem key={q}>
+                      <Button size='sm' onClick={() => clickDemo(q)}>
+                        {q}
+                      </Button>
+                    </WrapItem>)}
+                  </Wrap>
+                </DrawerBody>
+              </DrawerContent>
+            </Drawer>
           </Stack>
           <ResultsSkeleton isLoading={mutation.isLoading} />
           <Results data={mutation.data} />
         </Stack>
 
-      </Flex>
+      </Flex >
       <Flex>
         <Box bg={bg} px={16} w='100%' flexDirection='row'>
           <Text fontSize='sm' as='span' pr={4}><b>Indexed:</b> 2889 files</Text>
@@ -143,7 +187,6 @@ const Results = ({ data }: {
   const bg = useColorModeValue('white', 'gray.700')
 
   if (data === undefined) return null
-  console.log(data)
 
   return (
     <>
@@ -155,7 +198,7 @@ const Results = ({ data }: {
         p={6}
         my={4}
       >
-        <Box>{data.response}</Box>
+        <Box whiteSpace='pre-wrap'>{data.response}</Box>
         <Box>
           <Accordion>
             <AccordionItem>
