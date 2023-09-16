@@ -6,27 +6,38 @@ import { ArrowDownIcon, ArrowUpIcon, MoonIcon, Search2Icon, SearchIcon, SunIcon 
 
 import { api } from "~/utils/api";
 import styles from "./index.module.css";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Flex, FormControl, Heading, Input, Skeleton, Stack, Text, Wrap, WrapItem, useColorMode, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Flex, FormControl, Heading, Input, Skeleton, Stack, Text, Textarea, Wrap, WrapItem, useColorMode, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import useDebounce from "~/utils/hooks";
-import { Response } from "~/server/api/routers/sikaseek";
+import { Response, SourceNode } from "~/server/api/routers/sikaseek";
 
 const demoQuestions1 = [
   'How do I seal my toilet?',
-  'I want to apply for a job at Sika',
+  'Where to apply for a job at Sika?',
   'What tapes exist for roofing applications?'
 ]
 
 const demoQuestions2 = [
-  'What kind of mortars does Sika sell?',
+  'What are products which Sika offer for wall panels?',
   'What products usually go together with adhesives?',
   'What types of SikaSeal exist?'
 ]
 
 const demoQuestions3 = [
   'What kind of mortars does Sika sell?',
-  'What products usually go together with adhesives?',
+  'How to repair structural concrete cracks?',
   'Safety precautions for Davco Super TTB'
+]
+
+const demoQuestions4 = [
+  'Как правильно заливать цемент?',
+  'Parādi man kā lietot Sika produktus YouTube',
+  '縦樋部分を防水するにはどうすればよいですか?'
+]
+
+const demoQuestions5 = [
+  'In a form of haiku answer what is cement',
+  'Only with emojies tell me how to use sealants'
 ]
 
 export default function Home() {
@@ -133,9 +144,25 @@ export default function Home() {
                       </Button>
                     </WrapItem>)}
                   </Wrap>
-                  <Text my={4}>Questions about products for customers:</Text>
+                  <Text my={4}>Questions about products for Sika customers:</Text>
                   <Wrap>
-                    {demoQuestions2.map(q => <WrapItem key={q}>
+                    {demoQuestions3.map(q => <WrapItem key={q}>
+                      <Button size='sm' onClick={() => clickDemo(q)}>
+                        {q}
+                      </Button>
+                    </WrapItem>)}
+                  </Wrap>
+                  <Text my={4}>In different languages:</Text>
+                  <Wrap>
+                    {demoQuestions4.map(q => <WrapItem key={q}>
+                      <Button size='sm' onClick={() => clickDemo(q)}>
+                        {q}
+                      </Button>
+                    </WrapItem>)}
+                  </Wrap>
+                  <Text my={4}>Or even some fun 🤪:</Text>
+                  <Wrap>
+                    {demoQuestions5.map(q => <WrapItem key={q}>
                       <Button size='sm' onClick={() => clickDemo(q)}>
                         {q}
                       </Button>
@@ -199,23 +226,36 @@ const Results = ({ data }: {
         my={4}
       >
         <Box whiteSpace='pre-wrap'>{data.response}</Box>
-        <Box>
-          <Accordion allowToggle>
-            <AccordionItem>
-              <h2>
-                <AccordionButton>
-                  <Box as="span" flex='1' textAlign='left'>
-                    How do I know?
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel pb={4}>
-                This information is mentioned in {data.source_nodes[0]?.node.metadata.file_name}
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion>
-        </Box>
+        <SourceInfo sourceNodes={data.source_nodes} />
       </Stack>
     </>)
+}
+
+type SourceProps = {
+  sourceNodes?: SourceNode[]
+}
+const SourceInfo = ({ sourceNodes }: SourceProps) => {
+  if (sourceNodes === undefined) return null
+
+  return <Box>
+    <Accordion allowToggle>
+      <AccordionItem>
+        <h2>
+          <AccordionButton>
+            <Box as="span" flex='1' textAlign='left'>
+              How do I know?
+            </Box>
+            <AccordionIcon />
+          </AccordionButton>
+        </h2>
+        <AccordionPanel pb={4}>
+          <Heading size="sm">This information is mentioned in: </Heading>
+          {sourceNodes.map(({ node }) => <Box key={node.id_}>
+            <Text as='u'>{node.metadata.file_name}</Text>: Page {node.metadata.page_label}
+            <Textarea mt={2} mb={4} value={node.text} />
+          </Box>)}
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  </Box>
 }

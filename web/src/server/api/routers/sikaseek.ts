@@ -23,7 +23,7 @@ type Node = {
   start_char_idx: unknown
   end_char_idx: unknown
 }
-type SourceNode = {
+export type SourceNode = {
   node: Node
   score: number
 }
