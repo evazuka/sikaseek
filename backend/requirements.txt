@@ -1,0 +1,4 @@
+python-dotenv
+llama_index
+fastapi
+uvicorn[standard]

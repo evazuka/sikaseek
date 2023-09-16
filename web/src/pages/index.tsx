@@ -5,7 +5,7 @@ import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 
 import { api } from "~/utils/api";
 import styles from "./index.module.css";
-import { Box, Button, Flex, FormControl, Heading, Input, Skeleton, Stack, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, Heading, Input, Skeleton, Stack, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { useState } from "react";
 import useDebounce from "~/utils/hooks";
 
@@ -46,7 +46,7 @@ export default function Home() {
       </Box>
       {/* Body */}
       <Flex
-        minH='100vh'
+        minH='90vh'
         justify='center'
         bg={bg}
       >
@@ -79,6 +79,14 @@ export default function Home() {
           <ResultsSkeleton isLoading={isLoading} />
           <Results data={['a', 'b', 'c']} />
         </Stack>
+
+      </Flex>
+      <Flex>
+        <Box bg={bg} px={16} w='100%' flexDirection='row'>
+          <Text fontSize='sm' as='span' pr={4}><b>Indexed:</b> 2889 files</Text>
+          <Text fontSize='sm' as='span' pr={4}><b>Index type:</b> Vector</Text>
+          <Text fontSize='sm' as='span' pr={4}><b>Index ver.:</b> 16/09/23-11:02</Text>
+        </Box>
       </Flex>
     </>
   );
@@ -126,7 +134,7 @@ const Results = ({ data }: {
         my={12}
       >
         {
-          data.map(str => <>{str}</>)
+          data.map(str => <Box key={str}>{str}</Box>)
         }
       </Stack>
     </>)
