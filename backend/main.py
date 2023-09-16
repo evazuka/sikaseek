@@ -22,6 +22,7 @@ text_qa_template_str = (
     "---------------------\n"
     "Using context information answer the question: {query_str}\n"
     "If the context isn't helpful, you can also answer the question using your own knowledge base.\n"
+    "Answer in language in what question was asked.\n"
 )
 text_qa_template = PromptTemplate(text_qa_template_str)
 
