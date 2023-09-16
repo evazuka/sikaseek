@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { CheckIcon, MoonIcon, SearchIcon, SunIcon } from "@chakra-ui/icons"
 import { Box, Button, Card, Container, Divider, Flex, FormControl, HStack, Heading, Icon, Image, Input, Link, SimpleGrid, Stack, StackDivider, Text, VStack, Wrap, createIcon, useColorMode, useColorModeValue } from "@chakra-ui/react"
 import Head from "next/head"
@@ -515,6 +516,5 @@ const Arrow = createIcon({
     />
   ),
 })
-
 
 export default AboutPage
