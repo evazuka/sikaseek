@@ -1,23 +1,38 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import Head from "next/head";
 import Link from "next/link";
 
-import { MoonIcon, SunIcon } from '@chakra-ui/icons'
+import { MoonIcon, Search2Icon, SearchIcon, SunIcon } from '@chakra-ui/icons'
 
 import { api } from "~/utils/api";
 import styles from "./index.module.css";
-import { Box, Button, Flex, FormControl, Heading, Input, Skeleton, Stack, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Flex, FormControl, Heading, Input, Skeleton, Stack, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { useState } from "react";
 import useDebounce from "~/utils/hooks";
+import { Response } from "~/server/api/routers/sikaseek";
+
+const demoQuestions = [
+  'How do I seal my toilet?',
+  'I want to apply for a job at Sika',
+  'What tapes exist for roofing applications?'
+]
 
 export default function Home() {
   const bg = useColorModeValue('gray.50', 'gray.800')
   const { colorMode, toggleColorMode } = useColorMode()
 
   const [filter, setFilter] = useState('')
-  const debouncedFilter = useDebounce(filter, 1000)
 
-  const { data, isLoading } = api.example.hello.useQuery({ text: "from tRPC" });
+  const mutation = api.sikaseek.search.useMutation()
 
+  const handleSearch = async () => {
+    await mutation.mutateAsync({ text: filter })
+  }
+
+  const clickDemo = async (question: string) => {
+    setFilter(question)
+    await mutation.mutateAsync({ text: question })
+  }
 
   return (
     <>
@@ -53,11 +68,11 @@ export default function Home() {
         <Stack
           direction='column'
           my={36}
+          w='90vh'
         >
           <Stack
             spacing={4}
-            w={'full'}
-            maxW={'md'}
+            w='100%'
             bg={useColorModeValue('white', 'gray.700')}
             rounded={'xl'}
             boxShadow={'lg'}
@@ -67,17 +82,27 @@ export default function Home() {
             <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
               Search Sika
             </Heading>
-            <FormControl id="search">
-              <Input
-                size='lg'
-                _placeholder={{ color: 'gray.500' }}
-                type="search"
-                onChange={e => setFilter(e.target.value)}
-              />
-            </FormControl>
+            <Stack direction='row'>
+              <FormControl id="search">
+                <Input
+                  size='lg'
+                  _placeholder={{ color: 'gray.500' }}
+                  type="search"
+                  value={filter}
+                  onChange={e => setFilter(e.target.value)}
+                />
+              </FormControl>
+              <Button size='lg' rightIcon={<SearchIcon />} onClick={handleSearch} isLoading={mutation.isLoading}>Search</Button>
+            </Stack>
+            <Text>...or try this queries:</Text>
+            <Stack direction='row'>
+              {demoQuestions.map(q => <Button key={q} size='sm' onClick={() => clickDemo(q)}>
+                {q}
+              </Button>)}
+            </Stack>
           </Stack>
-          <ResultsSkeleton isLoading={isLoading} />
-          <Results data={['a', 'b', 'c']} />
+          <ResultsSkeleton isLoading={mutation.isLoading} />
+          <Results data={mutation.data} />
         </Stack>
 
       </Flex>
@@ -100,13 +125,11 @@ const ResultsSkeleton = ({ isLoading }: ResultsSkeletonProps) => {
   if (!isLoading) return null
   return <Stack
     spacing={4}
-    w={'full'}
-    maxW={'md'}
     bg={bg}
     rounded={'xl'}
     boxShadow={'lg'}
     p={6}
-    my={12}
+    my={4}
   >
     <Skeleton height="20px" />
     <Skeleton height="20px" />
@@ -115,27 +138,41 @@ const ResultsSkeleton = ({ isLoading }: ResultsSkeletonProps) => {
 }
 
 const Results = ({ data }: {
-  data?: string[]
+  data?: Response
 }) => {
   const bg = useColorModeValue('white', 'gray.700')
 
   if (data === undefined) return null
+  console.log(data)
 
   return (
     <>
       <Stack
         spacing={4}
-        w={'full'}
-        maxW={'md'}
         bg={bg}
         rounded={'xl'}
         boxShadow={'lg'}
         p={6}
-        my={12}
+        my={4}
       >
-        {
-          data.map(str => <Box key={str}>{str}</Box>)
-        }
+        <Box>{data.response}</Box>
+        <Box>
+          <Accordion>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box as="span" flex='1' textAlign='left'>
+                    How do I know?
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                This information is mentioned in {data.source_nodes[0]?.node.metadata.file_name}
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </Box>
       </Stack>
     </>)
 }
