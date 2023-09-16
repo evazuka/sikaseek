@@ -471,7 +471,7 @@ export const AboutPage = () => {
                   Try it now
                 </Button>
               </Link>
-              <Link href='' target="_blank">
+              <Link href='https://devpost.com/software/sikaseek' target="_blank">
                 <Button variant={'link'} colorScheme={'blue'} size={'sm'}>
                   Or check this hackathon project on devpost
                 </Button>
