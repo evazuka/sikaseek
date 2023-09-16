@@ -94,7 +94,7 @@ export default function Home() {
         <Stack
           direction='column'
           my={36}
-          w='90vh'
+          maxW={'xxl'}
         >
           <Stack
             spacing={4}
@@ -121,11 +121,13 @@ export default function Home() {
               <Button size='lg' rightIcon={<SearchIcon />} onClick={handleSearch} isLoading={mutation.isLoading}>Search</Button>
             </Stack>
             <Text>...or try this questions:</Text>
-            <Stack direction='row'>
-              {demoQuestions1.map(q => <Button key={q} size='sm' onClick={() => clickDemo(q)}>
-                {q}
-              </Button>)}
-            </Stack>
+            <Wrap direction={{ base: "column", md: 'row' }} >
+              {
+                demoQuestions1.map(q => <WrapItem key={q}><Button size='sm' onClick={() => clickDemo(q)}>
+                  {q}
+                </Button></WrapItem>)
+              }
+            </Wrap>
             <Stack direction='row'>
               <Button size='sm' onClick={onOpen} colorScheme="pink" rightIcon={<ArrowDownIcon />}>
                 Check out more cool examples
@@ -179,9 +181,9 @@ export default function Home() {
       </Flex >
       <Flex>
         <Box bg={bg} px={16} w='100%' flexDirection='row'>
-          <Text fontSize='sm' as='span' pr={4}><b>Indexed:</b> 2889 files</Text>
-          <Text fontSize='sm' as='span' pr={4}><b>Index type:</b> Vector</Text>
-          <Text fontSize='sm' as='span' pr={4}><b>Index ver.:</b> 16/09/23-11:02</Text>
+          <Text fontSize='sm' as='span' pr={4}><b>Indexed:</b> 2889 files, 120 urls</Text>
+          <Text fontSize='sm' as='span' pr={4}><b>Index type:</b> Summary[Vector(web), Vector(files)]</Text>
+          <Text fontSize='sm' as='span' pr={4}><b>Index ver.:</b> 16/09/23-18:23</Text>
         </Box>
       </Flex>
     </>
