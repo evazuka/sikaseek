@@ -200,7 +200,7 @@ const Results = ({ data }: {
       >
         <Box whiteSpace='pre-wrap'>{data.response}</Box>
         <Box>
-          <Accordion>
+          <Accordion allowToggle>
             <AccordionItem>
               <h2>
                 <AccordionButton>
