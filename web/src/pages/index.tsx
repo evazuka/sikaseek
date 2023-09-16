@@ -79,7 +79,8 @@ export default function Home() {
           </Stack>
 
           <Flex alignItems={'center'}>
-            <Stack direction={'row'} spacing={7}>
+            <Stack direction={'row'} spacing={1} alignItems='baseline'>
+              <Text>also in {colorMode === 'light' ? 'dark' : 'light'} →</Text>
               <Button variant='ghost' onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>

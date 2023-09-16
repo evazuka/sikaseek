@@ -35,7 +35,8 @@ export const AboutPage = () => {
         </Stack>
 
         <Flex alignItems={'center'}>
-          <Stack direction={'row'} spacing={7}>
+          <Stack direction={'row'} spacing={1} alignItems='baseline'>
+            <Text>also in {colorMode === 'light' ? 'dark' : 'light'} →</Text>
             <Button variant='ghost' onClick={toggleColorMode}>
               {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
             </Button>
@@ -81,7 +82,7 @@ export const AboutPage = () => {
                 ...still sharing data through email
               </Text>
             </Heading>
-            <Text color={'gray.800'} maxW={'3xl'} fontSize='lg'>
+            <Text maxW={'3xl'} fontSize='lg'>
               Sika® is a specialty chemicals company. It is among others industry leaders, who are lagging behind technological and digital curve.
               <br />
               <br />
@@ -318,7 +319,7 @@ export const AboutPage = () => {
               lineHeight={'100%'}>
               <Text size="sm" mb={6}>Sika® knowledgebase powered by AI</Text>
             </Heading>
-            <Text color={'gray.800'} maxW={'3xl'} fontSize='lg'>
+            <Text maxW={'3xl'} fontSize='lg'>
               We have indexed almost <Text as='b'>3000</Text> files (<Text as='samp'>.pdf</Text>, <Text as='samp'>.docx</Text>)
               containing Sika® brochures, product data sheets, safety data sheets,
               and a bunch of official Sika® webpages
@@ -343,7 +344,7 @@ export const AboutPage = () => {
                     isDisabled
                   />
                 </FormControl>
-                <Button _hover='#' cursor='default' colorScheme="red" size='lg' rightIcon={<SearchIcon />}>Search</Button>
+                <Button _hover={{}} cursor='default' colorScheme="red" size='lg' rightIcon={<SearchIcon />}>Search</Button>
               </Stack>
             </Stack>
           </Stack>
@@ -352,7 +353,7 @@ export const AboutPage = () => {
           <Box p={4}>
             <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'}>
               <Heading fontSize={'3xl'}>What we <Text as='u'>actually</Text> do</Heading>
-              <Text color={'gray.600'} fontSize={'xl'}>
+              <Text color={useColorModeValue('gray.600', 'gray.300')} fontSize={'xl'}>
                 Yes, all of this is implemented and works already
               </Text>
             </Stack>
@@ -364,7 +365,7 @@ export const AboutPage = () => {
                   </Box>
                   <VStack align={'start'}>
                     <Text fontWeight={600}>Natural language processing </Text>
-                    <Text color={'gray.600'}>Ask you questions in everyday language. Powered by GPT3.5</Text>
+                    <Text color={useColorModeValue('gray.600', 'gray.300')}>Ask you questions in everyday language. Powered by GPT3.5</Text>
                   </VStack>
                 </HStack>
                 <HStack align={'top'}>
@@ -373,7 +374,7 @@ export const AboutPage = () => {
                   </Box>
                   <VStack align={'start'}>
                     <Text fontWeight={600}>Get answers about anything</Text>
-                    <Text color={'gray.600'}>Whether you are looking for safety sheet of Sika® Microcrete-3000 or just a guide how to fix your toilet - we have got you covered</Text>
+                    <Text color={useColorModeValue('gray.600', 'gray.300')}>Whether you are looking for safety sheet of Sika® Microcrete-3000 or just a guide how to fix your toilet - we have got you covered</Text>
                   </VStack>
                 </HStack>
                 <HStack align={'top'}>
@@ -382,7 +383,7 @@ export const AboutPage = () => {
                   </Box>
                   <VStack align={'start'}>
                     <Text fontWeight={600}>Multilingual support</Text>
-                    <Text color={'gray.600'}>SikaSeek is capable of understanding and responding to messages in your language</Text>
+                    <Text color={useColorModeValue('gray.600', 'gray.300')}>SikaSeek is capable of understanding and responding to messages in your language</Text>
                   </VStack>
                 </HStack>
                 <HStack align={'top'}>
@@ -391,7 +392,7 @@ export const AboutPage = () => {
                   </Box>
                   <VStack align={'start'}>
                     <Text fontWeight={600}>Providing data sources</Text>
-                    <Text color={'gray.600'}>SikaSeek will attach a relevant documents and urls to any search result, so you can check for answer accuracy yourself</Text>
+                    <Text color={useColorModeValue('gray.600', 'gray.300')}>SikaSeek will attach a relevant documents and urls to any search result, so you can check for answer accuracy yourself</Text>
                   </VStack>
                 </HStack>
                 <HStack align={'top'}>
@@ -400,7 +401,7 @@ export const AboutPage = () => {
                   </Box>
                   <VStack align={'start'}>
                     <Text fontWeight={600}>Search indexed files</Text>
-                    <Text color={'gray.600'}>Current index consists of ~3000 files and many webpages</Text>
+                    <Text color={useColorModeValue('gray.600', 'gray.300')}>Current index consists of ~3000 files and many webpages</Text>
                   </VStack>
                 </HStack>
                 <HStack align={'top'}>
@@ -409,7 +410,7 @@ export const AboutPage = () => {
                   </Box>
                   <VStack align={'start'}>
                     <Text fontWeight={600}>Suits different users</Text>
-                    <Text color={'gray.600'}>Could be used both internally and externally</Text>
+                    <Text color={useColorModeValue('gray.600', 'gray.300')}>Could be used both internally and externally</Text>
                   </VStack>
                 </HStack>
                 <HStack align={'top'}>
@@ -418,7 +419,7 @@ export const AboutPage = () => {
                   </Box>
                   <VStack align={'start'}>
                     <Text fontWeight={600}>Vector storage</Text>
-                    <Text color={'gray.600'}>
+                    <Text color={useColorModeValue('gray.600', 'gray.300')}>
                       Embed and retrieve unstructured data in various formats:
                       <Text as='samp'>.pdf</Text>, <Text as='samp'>.docx</Text>, <Text as='samp'>.jpg</Text> etc.
                     </Text>
