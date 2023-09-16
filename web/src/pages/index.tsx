@@ -94,7 +94,7 @@ export default function Home() {
         <Stack
           direction='column'
           my={36}
-          maxW={'xxl'}
+          maxW={{ base: '100%', sm: '90%', md: '70%' }}
         >
           <Stack
             spacing={4}
